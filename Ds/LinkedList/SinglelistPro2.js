@@ -40,6 +40,7 @@ class SingleList{
       prevNode = current;
       current = nextNode;
     }
+    this.head = prevNode;
   }
   appendDoubleSides(data,dataL,dataR){
     let current = this.head;
@@ -79,9 +80,9 @@ newSLits.append(10);
 newSLits.append(40);
 newSLits.append(30);
 newSLits.append(20);
-// newSLits.print();
-// newSLits.appendDoubleSides(10,200,300);
-// newSLits.print();
+newSLits.print();
+newSLits.appendDoubleSides(10,200,300);
+newSLits.print();
 newSLits.reversingList();
 newSLits.print();
 // console.log(newSLits.head.data,newSLits.tail.data);

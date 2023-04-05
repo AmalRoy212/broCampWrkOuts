@@ -9,19 +9,16 @@ function findIndexOf(value,target){
 
   while(left < right){
     let mid = Math.floor((left + right)/2);
-    console.log('initial middddddd',mid);
-
     if(value[mid] == target){
       return mid;
-    }else if( value[mid] < target){
-      left = mid + 1;
-      console.log('left',mid);
+    }else if( target > value[mid]){
+      left = mid ;
     }else if( value[mid] > target){
-      right = mid - 1;
-      console.log('monuseaaaa',mid);
+      right = mid;
     }
   }
   return -1;
 }
 
-findIndexOf(newVals,30);
+let pos = findIndexOf(newVals,70);
+console.log('the posion is ',pos);

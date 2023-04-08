@@ -69,6 +69,6 @@ console.log('Sorting The List Ace*____________*');
 newSList.sortMyList(1);
 newSList.print();
 console.log('Sorting List Des*________________*');
-newSList.sortMyList(-1);
+newSList.sortMyList(1);
 newSList.print();
-// console.log(newSList.head.data,'_____',newSList.tail.data);
+console.log(newSList.head.data,'_____',newSList.tail.data);

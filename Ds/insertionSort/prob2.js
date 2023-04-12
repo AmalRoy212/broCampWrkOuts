@@ -77,7 +77,36 @@ class SingleList {
     // }
   }
 }
+function insertionSortLinkedList(head) {
+  if (!head || !head.next) {
+    return head;
+  }
 
+  let sortedList = null;
+  let current = head;
+
+  while (current) {
+    let nextNode = current.next;
+
+    if (!sortedList || current.value < sortedList.value) {
+      current.next = sortedList;
+      sortedList = current;
+    } else {
+      let searchNode = sortedList;
+
+      while (searchNode.next && current.value > searchNode.next.value) {
+        searchNode = searchNode.next;
+      }
+
+      current.next = searchNode.next;
+      searchNode.next = current;
+    }
+
+    current = nextNode;
+  }
+
+  return sortedList;
+}
 let newList = new SingleList();
 newList.append(40);
 newList.append(20);
@@ -88,6 +117,7 @@ newList.append(80);
 newList.append(50);
 newList.append(60);
 // newList.print();
-newList.sortMe();
+// newList.sortMe();
+insertionSortLinkedList(newList.head)
 newList.print();
 console.log('\n',newList.head.data, '___', newList.tail.data);

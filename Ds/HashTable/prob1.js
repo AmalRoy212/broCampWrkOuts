@@ -24,7 +24,6 @@ class HashTabale {
         }
       });
       if(!data){
-        console.log('hi2')
         this.table[index].push([key,value])
       }
     }else{

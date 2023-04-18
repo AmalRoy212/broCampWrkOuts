@@ -38,7 +38,6 @@ class HashTabale{
       if(element[0] == key){
         console.log(element);
         data = element;
-        
       }
     });
     // if(!data){

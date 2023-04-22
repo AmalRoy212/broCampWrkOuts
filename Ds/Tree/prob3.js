@@ -1,5 +1,7 @@
 //binary tree
 
+const e = require("express");
+
 class Node {
   constructor(data){
     this.data = data;
@@ -67,18 +69,29 @@ class BinaryTree{
       prev = null;
       return;
     }
-
+    let parentNode = null;
     while(true){
       if(data < current.data){
+        parentNode = current
         current = current.left;
       }else if(data > current.data){
+        parentNode = current;
         current = current.right;
       }else if(data == current.data){
         let move = current.right;
         let prev = null;
-        while(move.left){
-          prev = move
-          move = move.left;
+        if(!current.right && !current.left){
+          parentNode.right = null;
+          return
+        }else if(!move.left){
+          current.data = move.data;
+          current.right = null;
+          return;
+        }else{
+          while(move.left){
+            prev = move
+            move = move.left;
+          }
         }
         current.data = move.data;
         prev.left = null;
@@ -112,7 +125,7 @@ tree.insert(1);
 tree.insert(7);
 tree.insert(9);
 
-tree.remove(8);
+tree.remove(1);
 
 tree.inOrder()
 

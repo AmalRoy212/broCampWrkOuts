@@ -17,9 +17,9 @@ class Binary{
       this.root = newNode;
       return;
     }else{
-      let current = this.root
+      let current = this.root;
       while(true){
-        if(data < current.left){
+        if(data < current.data){
           if(!current.left){
             current.left = newNode;
             break;
@@ -65,12 +65,64 @@ class Binary{
       console.log(currNode.data);
     }
   }
-
+  remove(data){
+    this.removeHelper(data,this.root,null);
+  }
+  removeHelper(data,currentNode,parentNode){
+    while(currentNode){
+      if(data < currentNode.data){
+        parentNode = currentNode;
+        currentNode = currentNode.left;
+      }else if(data > currentNode.data){
+        parentNode = currentNode;
+        currentNode = currentNode.right;
+      }else{
+        if(currentNode.right && currentNode.left){
+          currentNode.data = this.getMinValue(currentNode.right);
+          this.removeHelper(currentNode.data,currentNode.right,currentNode);
+        }else{
+          if(!parentNode){
+            if(currentNode.left){
+              this.root = currentNode.left;
+            }else{
+              this.root = currentNode.right;
+            }
+          }else{
+            if(parentNode.left == currentNode){
+              if(currentNode.left){
+                parentNode.left = currentNode.left;
+              }else{
+                parentNode.left = currentNode.right;
+              }
+            }else if(parentNode.right == currentNode){
+              if(currentNode.left){
+                parentNode.right = currentNode.left;
+              }else{
+                parentNode.right = currentNode.right;
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+  }
+  getMinValue(startNode){
+    if(!startNode.left){
+      return startNode.data;
+    }
+    return this.getMinValue(startNode.left);
+  }
 }
 let tree = new Binary();
 tree.insert(10);
 tree.insert(8);
 tree.insert(11);
-// tree.inOreder();
-// tree.preOrder();
-// tree.postOrder();
+tree.inOrder();
+console.log('******');
+tree.preOrder();
+console.log('******');
+tree.postOrder();
+console.log('******');
+tree.remove(11);
+tree.inOrder();

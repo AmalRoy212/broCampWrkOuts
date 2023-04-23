@@ -45,7 +45,7 @@ class MinHeap {
   }
 
   /*for shifting up the child value to the parent if the child value 
-  is greater than parent*/
+  is less than parent*/
   shiftUp(currentIndex) {
     let parentIdx = this.parent(currentIndex);
     while(currentIndex > 0 && this.values[parentIdx] > this.values[currentIndex]){

@@ -41,8 +41,39 @@ class Trie{
       suffix = suffix.slice(i);
     }
   }
+
+  remove(word) {
+    const stack = [];
+    let currentNode = this.root;
+
+    // Traverse the Trie to find the node representing the word to remove.
+    for (let i = 0; i < word.length; i++) {
+      const char = word[i];
+      if (!currentNode.children[char]) {
+        return;
+      }
+      stack.push([currentNode, char]);
+      currentNode = currentNode.children[char];
+    }
+
+    // Mark the node as not a word.
+    currentNode.EndOfWord = false;
+
+    // Traverse up the Trie and delete any nodes that have no children and are not words.
+    while (stack.length > 0) {
+      const [parentNode, char] = stack.pop();
+      const node = parentNode.children[char];
+      if (Object.keys(node.children).length === 0 && !node.EndOfWord) {
+        delete parentNode.children[char];
+      } else {
+        break;
+      }
+    }
+  }
 }
 
 let newTrie = new Trie();
 newTrie.insert('amal');
+newTrie.insert('akhil');
+newTrie.remove('amal')
 console.log(newTrie.search('amal'));

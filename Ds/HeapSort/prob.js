@@ -35,6 +35,6 @@ function heapSort(values) {
   return values;
 }
 
-let arr = [9, 5, 8, 3, 7, 1, 2, 6, 4];
+let arr = ['Z','B','A','T','M'];
 let fVals = heapSort(arr)
 console.log(fVals);

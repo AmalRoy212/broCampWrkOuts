@@ -31,13 +31,11 @@ class Trie {
       }
       currentNode = currentNode.children[char];
     }
-    if (currentNode.children[this.EndOfWord])
-      return true;
-    else
-      return false;
+    return true;
+    
   }
 }
 
 let trie = new Trie();
 trie.insert('amal');
-console.log(trie.search('m'));
+console.log(trie.search('am'));

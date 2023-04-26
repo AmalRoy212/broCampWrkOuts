@@ -38,6 +38,7 @@ function heapify(values,length){
   }
   buildHeap();
 }
+// something is wrong with this code want to fix
 
 function heapSort(values){
   // heapify(values,values.length-1);

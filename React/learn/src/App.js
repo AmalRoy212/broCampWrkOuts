@@ -16,6 +16,7 @@ function App() {
   let persons = [{name:'Amal',age:25},{name:'Akhil',age:26},{name:'Dhamu',age:55}];
   return (
     <div className="App">
+
       <button onClick = {addCount}>Add</button>
       <Counter {...data} />
       <Counter title = {'Second Counter'}  count = {count} />

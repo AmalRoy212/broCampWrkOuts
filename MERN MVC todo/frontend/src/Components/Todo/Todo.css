@@ -1,0 +1,99 @@
+.todo_holder{
+  width: 90%;
+  height: 50vh;
+  padding: 3%;
+  display: flex;
+  float: left;
+}
+.contentHolder{
+  width: 70%;
+  margin:2rem;
+  background: linear-gradient(rgba(102, 51, 153, 0.538),rgba(0, 0, 255, 0));
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  margin: auto;
+  margin-top: 1rem;
+  border-radius: 20px;
+  overflow: hidden;
+  color: #000;
+  padding: 2rem;
+}
+.contentHolder:before {
+  width: 63.2%;
+  height: 122.5vh;
+  margin: 2rem auto;
+  background: linear-gradient(rebeccapurple, rgba(0, 0, 255, 0.598));
+  margin-top: 18.5rem;
+  margin-left: 18.3rem;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 2rem;
+  background-size: cover;
+  background-position: center;
+  backdrop-filter: blur(2px);
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+.inputFeild{
+  width: 50%;
+  height: 50px;
+  border-radius: 10px;
+}
+.addButton{
+  background-color: green;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1rem;
+  border: 2px solid gray;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.deleteImage{
+  width: 35px;
+  height: 32px;
+  cursor: pointer;
+}
+.alarmImage{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.cards{
+  width:90%;
+  height: 100px;
+  background-color: skyblue;
+  margin: 1rem;
+  border: 2px solid rgb(43, 43, 43);
+  border-radius: 20px;
+  display: flex;
+  padding: 1rem;
+}
+.firstHlf{
+  height: 100%;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .5rem;
+  overflow: auto;
+  bottom: 1;
+}
+.firstHlf::-webkit-scrollbar {
+  display: none;
+}
+.scndHlf{
+  height: 100%;
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

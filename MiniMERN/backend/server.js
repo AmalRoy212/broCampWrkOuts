@@ -4,6 +4,7 @@ const userRoute = require('./routes/userRouter');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 const mongoConnecter = require('./config/db');
 const cookie_parser = require('cookie-parser');
+const cors = require('cors');
 
 dotenv.config();
 const port = process.env.port || 5000;
@@ -11,6 +12,8 @@ const port = process.env.port || 5000;
 //connecting mongo db
 mongoConnecter();
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));

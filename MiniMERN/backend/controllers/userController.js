@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const genToken = require('../utils/generateToken');
+const generateToken = require('../utils/generateToken');
 const userModel = require('../models/userModel');
 
 // @desc  Auth user / set token
@@ -10,7 +10,7 @@ const authUser = asyncHandler(async function (req, res) {
   const user = await userModel.findOne({email});
 
   if(user && await user.matchPassword(password)){
-    await genToken(res,user._id);
+    await generateToken(res,user._id);
     res.status(201).json({
       _id : user._id,
       name : user.name,
@@ -40,7 +40,7 @@ const registerUser = asyncHandler(async function (req, res) {
   })
 
   if (user) {
-    genToken(res, user._id,)
+    await generateToken(res, user._id,)
     res.status(201).json({
       _id: user._id,
       name: user.name,

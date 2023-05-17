@@ -19,6 +19,7 @@ const Header = () => {
       await logoutApiCall().unwrap();
       dispatch(logout());
       navigate('/login')
+      localStorage.removeItem('user');
     } catch (error) {
       console.log(error.message);
     }
@@ -36,9 +37,9 @@ const Header = () => {
             <Nav className='ms-auto'>
               {userInfo ? (
                 <>
-                  <NavDropdown style={{ marginRight: '1.2rem' }} title={userInfo.name} id='username'>
+                  <NavDropdown style={{ marginRight: '2.8rem' }} title={userInfo.name} id='username'>
                     <LinkContainer to={'/profile'}>
-                      <NavDropdown.Item>profile</NavDropdown.Item>
+                      <NavDropdown.Item>Profile</NavDropdown.Item>
                     </LinkContainer>
                     <NavDropdown.Item onClick={logoutHandler}>Log Out</NavDropdown.Item>
                   </NavDropdown>

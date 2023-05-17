@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "bootstrap": "^5.2.3",
     "cors": "^2.8.5",
+    "firebase": "^9.22.0",
     "mdb-react-ui-kit": "^6.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",

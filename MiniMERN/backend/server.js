@@ -5,6 +5,7 @@ const errorMiddleware = require('./middlewares/errorMiddleware');
 const mongoConnecter = require('./config/db');
 const cookie_parser = require('cookie-parser');
 const cors = require('cors');
+const path = require('path');
 
 dotenv.config();
 const port = process.env.port || 5000;
@@ -23,7 +24,16 @@ app.use(cookie_parser());
 //this will be the api which is going to provide the functionalities
 app.use('/api/users',userRoute); 
 
-app.get('/',(req,res) => res.send('server is ready'));
+if(process.env.NODE_ENV == 'production'){
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, 'frontend/dist')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'))
+  })
+}else{
+  app.get('/',(req,res) => res.send('server is ready'));
+}
+
 
 //for handling the errors we have done a costom error handling module
 app.use(errorMiddleware.notFount);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import FromContainer from '../formContainer/FromContainer';
@@ -7,6 +7,8 @@ import { setCredentials } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
 import Loader from '../loader/Loader';
 import { useUpdateUserMutation } from '../../slices/usersApiSlice';
+import { FirebaseContext } from '../../context/firebaseContext'
+
 
 
 
@@ -15,6 +17,9 @@ function EditUser() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [image,setImage] = useState('');
+  const { firebase } = useContext(FirebaseContext);
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,42 +28,60 @@ function EditUser() {
 
   const [updateProfile, { isLoading }] = useUpdateUserMutation();
 
-
-  const setCookie = () => {
-    document.cookie = `jwt=${userInfo}; expires=30 * 24 * 60 * 60 * 1000;`;
-  };
-
   useEffect(() => {
-    setCookie();
     setName(userInfo.name);
     setEmail(userInfo.email);
   }, [userInfo.name, userInfo.email]);
 
   const submitHandler = async function (e) {
     e.preventDefault();
-
-    if (password != confirmPassword) {
-      toast.error('Password do not match.!');
-    } else {
-      try {
-        const res = await updateProfile({
-          _id : userInfo._id,
-          name,
-          email,
-          password
-        }).unwrap();
-        dispatch(setCredentials({...res}));
-        toast.success('Profile updated');
-      } catch (error) {
-        toast.error(error?.data?.message || error.error);
-      }
-    }
+    firebase.storage().ref(`/image/${image.name}`).put(image).then(({ ref }) => {
+      ref.getDownloadURL().then(async (url) => {
+        let imageSrc = url;
+        localStorage.removeItem('userImg');
+        localStorage.setItem('userImg',url);
+        if (password != confirmPassword) {
+          toast.error('Password do not match.!');
+        } else {
+          try {
+            const res = await updateProfile({
+              _id: userInfo._id,
+              name,
+              email,
+              password,
+              imageSrc
+            }).unwrap();
+            dispatch(setCredentials({ ...res }));
+            dispatch(setCredentials({ ...res }));
+            toast.success('Profile updated');
+            navigate('/')
+          } catch (error) {
+            toast.error(error?.data?.message || error.error);
+          }
+        }
+      })
+    })
   }
   return (
     <div>
       <FromContainer>
         <h1>Edit Profile</h1>
         <Form onSubmit={submitHandler}>
+          <Form.Group className='my-2' controlId='name'>
+            <br />
+            <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+              {image && <img style={{objectFit:'cover',border:'2px solid black',borderRadius:'50%'}} className='m2' alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>}
+            </div>
+            <Form.Label style={{display:'flex',justifyContent:'center',alignItems:'center'}} className='mt-2'>Profile Image </Form.Label>
+            <br />
+            <input style={{width:'99%',border:'1px solid #ced4da',borderRadius:'5px'}} className='m-1 p-1' onChange={(e) => setImage(e.target.files[0])} type="file" />
+            {/* <Form.Control
+              type='file'
+              value={image}
+              onChange={(e) => setImage(e.target.files[0])}>
+            </Form.Control> */}
+          </Form.Group>
+
           <Form.Group className='my-2' controlId='name'>
             <Form.Label>Name </Form.Label>
             <Form.Control

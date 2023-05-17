@@ -26,7 +26,7 @@ const authUser = asyncHandler(async function (req, res) {
 // route  POST api/user
 // access  public
 const registerUser = asyncHandler(async function (req, res) {
-  const { name, email, password } = req.body;
+  const { name, email, password, imageSrc } = req.body;
   const userExist = await userModel.findOne({ email });
   if (userExist) {
     res.status(400);
@@ -36,7 +36,8 @@ const registerUser = asyncHandler(async function (req, res) {
   const user = await userModel.create({
     name,
     email,
-    password
+    password,
+    imageSrc
   })
 
   if (user) {
@@ -71,7 +72,8 @@ const getUserProfile = asyncHandler(async function (req, res) {
   const user = {
     _id : req.user._id,
     name : req.user.name,
-    email : req.user.email
+    email : req.user.email,
+    imageSrc : req.user.imageSrc
   }
   res.status(200).json({ user });
 });
@@ -85,17 +87,19 @@ const updateUserProfile = asyncHandler(async function (req, res) {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
+    user.imageSrc = req.body.imageSrc || user.imageSrc;
 
     if (req.body.password) {
       user.password = req.body.password || user.password;
     }
-    
+
     const updatedUser = await user.save();
 
     res.status(200).json({
       _id : updatedUser._id,
       name : updatedUser.name,
-      email : updatedUser.email
+      email : updatedUser.email,
+      imageSrc : updatedUser.imageSrc
     })
     
   }else{
@@ -104,10 +108,22 @@ const updateUserProfile = asyncHandler(async function (req, res) {
   }
   res.status(200).json({ message: 'update user' });
 });
+
+const getUserData = asyncHandler(async function( req, res ) {
+  const { _id } = req.body;
+  const user = await userModel.findById(_id);
+  console.log(user,115);
+  if(user){
+    res.status(200).json(user);
+  }else{
+    res.status(404).json('user not found');
+  }
+})
 module.exports = {
   authUser,
   registerUser,
   logoutUser,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  getUserData
 }

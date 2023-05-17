@@ -8,6 +8,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 router.post('/',userController.registerUser);
 router.post('/auth',userController.authUser);
 router.post('/logout',userController.logoutUser);
+router.get('/data',userController.getUserData);
 //chain routing 
 router
   .route('/profile')

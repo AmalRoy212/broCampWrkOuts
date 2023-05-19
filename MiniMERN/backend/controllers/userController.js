@@ -14,7 +14,8 @@ const authUser = asyncHandler(async function (req, res) {
     res.status(201).json({
       _id : user._id,
       name : user.name,
-      email : user.email
+      email : user.email,
+      img : user.imageSrc
     })
   }else{
     res.status(401);
@@ -45,7 +46,8 @@ const registerUser = asyncHandler(async function (req, res) {
     res.status(201).json({
       _id: user._id,
       name: user.name,
-      email: user.email
+      email: user.email,
+      img : user.imageSrc
     })
   } else {
     res.status(400);

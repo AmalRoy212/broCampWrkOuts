@@ -6,6 +6,7 @@ const mongoConnecter = require('./config/db');
 const cookie_parser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
+const adminRouter = require('./routes/adminRouter');
 
 dotenv.config();
 const port = process.env.port || 5000;
@@ -23,6 +24,7 @@ app.use(cookie_parser());
 
 //this will be the api which is going to provide the functionalities
 app.use('/api/users',userRoute); 
+app.use('/api/admin',adminRouter);
 
 if(process.env.NODE_ENV == 'production'){
   const __dirname = path.resolve();

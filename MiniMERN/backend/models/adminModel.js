@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userSchema = mongoose.Schema({
-  name : {
-    type : String,
-    required : true
-  },
+const adminSchema = mongoose.Schema({
   email : {
     type : String,
     required : true,
@@ -15,20 +11,14 @@ const userSchema = mongoose.Schema({
     type : String,
     required : true
   },
-  imageSrc : {
-    type : String,
-    required : true
-  },
-  isBlocked : {
+  isAdmin : {
     type : Boolean,
     default : false
   }
-},{
-  timestamps : true
 });
 
 // hashing the password
-userSchema.pre('save',async function(next){
+adminSchema.pre('save',async function(next){
   if(!this.isModified('password')){
     next();
   }
@@ -38,9 +28,9 @@ userSchema.pre('save',async function(next){
 })
 
 // for authenticating the user pass word while log in
-userSchema.methods.matchPassword = async function(enteredPassword){
+adminSchema.methods.matchPassword = async function(enteredPassword){
   return await bcrypt.compare(enteredPassword,this.password);
 }
 
-const User = mongoose.model('user',userSchema);
-module.exports = User;
+const Admin = mongoose.model('admin',adminSchema);
+module.exports = Admin;

@@ -1,0 +1,11 @@
+GET http://localhost:3000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYW1hbCIsImlhdCI6MTY4NDQ3OTMxMX0.aYZWAhcaZwXw0nI2X003wXq2EH09mYSmlOqjJ_lLH2Y.eyJuYW1lIjoiYW1hbCIsImlhdCI6MTY4NDQ3OTI1MX0.9IpKcbhhIweQ5dQg8OzXvmQPZo00FZ1o83ddpsFWIxo
+
+###
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "username" : "amal"
+}

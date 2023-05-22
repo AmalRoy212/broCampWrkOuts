@@ -3,17 +3,22 @@ const asyncHandler = require('express-async-handler');
 const userModel = require('../models/userModel');
 
 const protecter = asyncHandler(async function (req, res, next) {
-  const { token } = req.body;
+  const token = req.headers.authorization.split(' ')[1];
   if (token) {
     try {
       const decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
       const user = await userModel.findById({ _id: decode.user });
-      if (user) {
-        req.body.user_Id = user._id;
-        next();
+      if (token === user.accessToken) {
+        if (user) {
+          req.body.user_Id = user._id;
+          next();
+        } else {
+          res.status(404);
+          throw new Error('User is Invalid');
+        }
       } else {
-        res.status(404);
-        throw new Error('User is Invalid');
+        res.status(401);
+        throw new Error('The token is not longer valid');
       }
 
     } catch (error) {

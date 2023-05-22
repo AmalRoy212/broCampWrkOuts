@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
   imgSrc : {
     type : String,
     default : ''
+  },
+  accessToken : {
+    type : String,
+    default : ''
   }
 })
 

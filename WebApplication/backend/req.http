@@ -2,8 +2,8 @@ POST http://localhost:5000/api/users/signup
 Content-Type: application/json
 
 {
-  "name" : "amal",
-  "email" : "amal@gmail.com",
+  "name" : "akhil",
+  "email" : "akhil@gmail.com",
   "password" : "12345"
 }
 
@@ -13,15 +13,21 @@ POST http://localhost:5000/api/users/login
 Content-Type: application/json
 
 {
-  "email" : "amal@gmail.com",
+  "email" : "akhil@gmail.com",
   "password" : "12345"
 }
 
 ###
 
 POST http://localhost:5000/api/users/home
-Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjQ2YTY4NDE4MDQ3OTA3MGEyMDc2NmNmIiwiaWF0IjoxNjg0NzY3ODg3fQ.03OpNrbhsuVpjc0BmLZEh6WcrxLdSJecW1zCk6e1Aig
 
-{
-  "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjQ2YTUwYWM1ZDUxYjYzODU5NGFiMDFiIiwiaWF0IjoxNjg0Njg5MDY5fQ.aOS5TnqEXh062loxNlbA6zf1hariTxkqI8P1wUj7tCs"
-}
+###
+
+GET http://localhost:5000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjQ2YTY4NDE4MDQ3OTA3MGEyMDc2NmNmIiwiaWF0IjoxNjg0NzY3ODg3fQ.03OpNrbhsuVpjc0BmLZEh6WcrxLdSJecW1zCk6e1Aig
+
+###
+
+GET http://localhost:5000/api/users/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjQ2YTY4NDE4MDQ3OTA3MGEyMDc2NmNmIiwiaWF0IjoxNjg0NzY3ODg3fQ.03OpNrbhsuVpjc0BmLZEh6WcrxLdSJecW1zCk6e1Aig

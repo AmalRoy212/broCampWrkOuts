@@ -1,6 +1,7 @@
 const generateAthToken = require('../utils/generateToken');
 const userModel = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
+const path = require('path');
 
 /*
   * creating user : method Returns the userToken along wiht userDetails
@@ -10,8 +11,8 @@ const asyncHandler = require('express-async-handler');
 */
 
 const createUser = asyncHandler(async function (req, res) {
-  const { name, email, password } = req.body;
-
+  const { name, email, password } = req.body; 
+  const { filename } = req.file;
   const userExist = await userModel.findOne({ email: email });
   if (userExist) {
     res.status(400);
@@ -21,15 +22,17 @@ const createUser = asyncHandler(async function (req, res) {
   const user = await userModel.create({
     name,
     email,
-    password
+    password,
+    imgSrc : filename
   });
-
+  await user.save();
   if (user) {
     // const token = await generateAthToken(user);
     res.status(200).json({
       id: user._id,
       name: user.name,
       email: user.email,
+      image : user.imgSrc
     })
   } else {
     res.status(400);

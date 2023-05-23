@@ -14,7 +14,6 @@ const createUser = asyncHandler(async function (req, res) {
 
   const userExist = await userModel.findOne({ email: email });
   if (userExist) {
-    console.log(userExist);
     res.status(400);
     throw new Error('email id is already in use');
   }
@@ -58,7 +57,7 @@ const authUser = asyncHandler(async function (req, res) {
         { $set: { accessToken: token } },
       )
       if (updatedUser) {
-        userLoginHelper(updatedUser._id,res)
+        userLoginHelper(updatedUser._id, res)
       }
     } else {
       res.send(403);
@@ -70,14 +69,14 @@ const authUser = asyncHandler(async function (req, res) {
   }
 })
 
-async function userLoginHelper(_id,res){
+async function userLoginHelper(_id, res) {
   const user = await userModel.findById(_id);
-  if(user && user.accessToken !== ''){
-    res.status(201).json({
+  if (user && user.accessToken !== '') {
+    res.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
-      token : user.accessToken
+      token: user.accessToken
     })
   }
 }
@@ -112,9 +111,9 @@ const home = asyncHandler(async function (req, res) {
 
 const logoutUser = asyncHandler(async function (req, res) {
   const { user_Id } = req.body;
-  const user = await userModel.findByIdAndUpdate({ _id : user_Id},{$set :{accessToken:''}});
-  if(user){
-    res.status(200).json({completed : true,message : 'loged out succesfully'});
+  const user = await userModel.findByIdAndUpdate({ _id: user_Id }, { $set: { accessToken: '' } });
+  if (user) {
+    res.status(200).json({ completed: true, message: 'loged out succesfully' });
   }
 })
 
@@ -125,24 +124,66 @@ const logoutUser = asyncHandler(async function (req, res) {
   * Access : Private
 */
 
-const getUser = asyncHandler( async function( req, res ){
+const getUser = asyncHandler(async function (req, res) {
   const { user_Id } = req.body;
-  const user = await userModel.findById({ _id : user_Id });
-  if(!user){
+  const user = await userModel.findById({ _id: user_Id });
+  if (!user) {
     res.status(404);
     throw new Error('User does not exist');
   }
   res.status(200).json({
-    id : user._id,
-    name : user.name,
-    email : user.email,
-    token : user.accessToken
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    token: user.accessToken
   })
 })
+
+/*
+  * Update User : method return the user entire details after updating the user details
+  * Method : PUT
+  * Route : /api/users/update
+  * Access : Private
+*/
+
+const updateUser = asyncHandler(async function (req, res) {
+  const { user_Id } = req.body;
+  const user = await userModel.findById({ _id : user_Id });
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isBlocked = user.isBlocked;
+    user.imageSrc = req.body.imageSrc || user.imageSrc;
+    user.accessToken = user.accessToken;
+
+    if (req.body.password) {
+      user.password = req.body.password || user.password;
+    }
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      _id : updatedUser._id,
+      name : updatedUser.name,
+      email : updatedUser.email,
+      status : updatedUser.isBlocked,
+      imageSrc : updatedUser.imageSrc,
+      message : "Updated Succesfully"
+    })
+    
+  }else{
+    res.status(404);
+    throw new Error('user not fund')
+  }
+})
+
+
 module.exports = {
   createUser,
   authUser,
   home,
   getUser,
-  logoutUser
+  logoutUser,
+  updateUser
 }

@@ -4,38 +4,55 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
 import axios from '../config/axios';
+import { useSelector } from 'react-redux';
 
 
-function Signup() {
+function EditUser() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [image, setImage] = useState('');
+  const [user, setUser] = useState()
 
-  const navigae = useNavigate();
 
+
+  const navigate = useNavigate();
+
+  let { token } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    axios.get('/users/', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then((res) => {
+        setUser(res.data)
+      })
+        .catch((err) => console.log(err.message));
+  }, [])
 
   const submitHandler = async function (e) {
     e.preventDefault();
 
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-      formData.append('password', password);
-      formData.append('imgSrc', image);
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('imgSrc', image);
 
     if (password != confirmPassword) {
       toast.error('Password do not match.!');
     } else {
       try {
-        axios.post('/users/signup', formData, {
+        axios.put('/users/update', formData, {
           headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
           }
         }).then((res) => {
-          console.log(res.data.name);
-          navigae('/login');
+          navigate('/profile');
         })
       } catch (error) {
         console.log(error.message)
@@ -49,12 +66,12 @@ function Signup() {
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol lg="9" xl="6">
             <MDBCard className='p-5' style={{ boxShadow: '0 5px 15px rgba(0, 0, 0, .5)', marginTop: '5rem', borderRadius: '10px', background: '#DDDDDE' }}>
-              <h1>Sign Up</h1>
+              <h1>Update Profile</h1>
               <Form onSubmit={submitHandler}>
                 <Form.Group className='my-2' controlId='name'>
                   <br />
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    {image && <img style={{ objectFit: 'cover', border: '2px solid black', borderRadius: '50%' }} className='m2' alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>}
+                    {user && <img style={{ objectFit: 'cover', border: '2px solid black', borderRadius: '50%' }} className='m2' alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>}
                   </div>
                   <Form.Label style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='mt-2'>Profile Image </Form.Label>
                   <br />
@@ -65,8 +82,9 @@ function Signup() {
                   <Form.Label style={{ float: 'left' }}>Name </Form.Label>
                   <Form.Control
                     type='text'
-                    placeholder='Please enter your name'
+                    placeholder={user && user.name}
                     value={name}
+
                     onChange={(e) => setName(e.target.value)}>
                   </Form.Control>
                 </Form.Group>
@@ -75,7 +93,7 @@ function Signup() {
                   <Form.Label style={{ float: 'left' }}>Email Address</Form.Label>
                   <Form.Control
                     type='email'
-                    placeholder='Please enter email'
+                    placeholder={user && user.email}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}>
                   </Form.Control>
@@ -101,15 +119,7 @@ function Signup() {
                   </Form.Control>
                 </Form.Group>
 
-                <Button type='submit' variant='primary' className='mt-3'>
-                  Sign Up
-                </Button>
-
-                <Row className='py-3'>
-                  <Col>
-                    Already have an account? <Link to={'/login'}>Register</Link>
-                  </Col>
-                </Row>
+                <Button type='submit' variant='primary' className='mt-3'>Update</Button>
               </Form>
             </MDBCard>
           </MDBCol>
@@ -119,4 +129,4 @@ function Signup() {
   )
 }
 
-export default Signup;
+export default EditUser;

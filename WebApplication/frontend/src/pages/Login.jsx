@@ -2,38 +2,38 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import Navbar from '../components/Navbar/Header';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
 import axios from '../config/axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux-toolkit/authSlice'
 
 
 function Login() {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [image, setImage] = useState('');
 
-  const navigae = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const { token } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if(token){
+      navigate('/home');
+    }
+  },[token,navigate])
 
   const submitHandler = async function (e) {
     e.preventDefault();
   
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('password', password);
-    formData.append('imgSrc', image); 
-  
     try {
-      axios.post('/users/login', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      axios.post('/users/login',{
+        email,
+        password
       }).then((res)=>{
-        console.log(res.data);
-        navigae('/login');
+        localStorage.setItem('token',res.data.token);
+        dispatch(login(res.data.token));
+        navigate('/home');
       })
     } catch (error) {
       toast.error(error.message);
@@ -42,12 +42,11 @@ function Login() {
 
   return (
     <>
-      <Navbar />
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol lg="9" xl="6">
             <MDBCard className='p-5' style={{ boxShadow: '0 5px 15px rgba(0, 0, 0, .5)',marginTop:'5rem',borderRadius:'10px',background:'#DDDDDE'}}>
-              <h1>Sign Up</h1>
+              <h1>Log In</h1>
               <Form onSubmit={submitHandler}>
 
                 <Form.Group className='my-2' controlId='email'>

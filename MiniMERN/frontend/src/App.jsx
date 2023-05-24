@@ -5,7 +5,8 @@ import { Container } from 'react-bootstrap'
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { FirebaseContext } from './context/firebaseContext';
-import firebase from './firebase/config'
+import firebase from './firebase/config';
+
 
 
 function App() {

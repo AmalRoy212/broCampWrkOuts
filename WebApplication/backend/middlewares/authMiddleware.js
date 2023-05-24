@@ -4,10 +4,12 @@ const userModel = require('../models/userModel');
 
 const protecter = asyncHandler(async function (req, res, next) {
   const token = req.headers.authorization.split(' ')[1];
-  if (token) {
+  console.log(token);
+  if (token,'****************************************************************') {
     try {
       const decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
       const user = await userModel.findById({ _id: decode.user });
+      console.log(user._id  ,'****************************************************************');
       if (token === user.accessToken) {
         if (user) {
           req.body.user_Id = user._id;

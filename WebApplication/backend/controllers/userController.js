@@ -2,6 +2,7 @@ const generateAthToken = require('../utils/generateToken');
 const userModel = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 const path = require('path');
+const jwt = require('jsonwebtoken');
 
 /*
   * creating user : method Returns the userToken along wiht userDetails
@@ -11,7 +12,7 @@ const path = require('path');
 */
 
 const createUser = asyncHandler(async function (req, res) {
-  const { name, email, password } = req.body; 
+  const { name, email, password } = req.body;
   const { filename } = req.file;
   const userExist = await userModel.findOne({ email: email });
   if (userExist) {
@@ -23,7 +24,7 @@ const createUser = asyncHandler(async function (req, res) {
     name,
     email,
     password,
-    imgSrc : filename
+    imgSrc: filename
   });
   await user.save();
   if (user) {
@@ -32,7 +33,7 @@ const createUser = asyncHandler(async function (req, res) {
       id: user._id,
       name: user.name,
       email: user.email,
-      image : user.imgSrc
+      image: user.imgSrc
     })
   } else {
     res.status(400);
@@ -138,7 +139,8 @@ const getUser = asyncHandler(async function (req, res) {
     id: user._id,
     name: user.name,
     email: user.email,
-    token: user.accessToken
+    token: user.accessToken,
+    imgSrc: user.imgSrc
   })
 })
 
@@ -150,8 +152,13 @@ const getUser = asyncHandler(async function (req, res) {
 */
 
 const updateUser = asyncHandler(async function (req, res) {
-  const { user_Id } = req.body;
-  const user = await userModel.findById({ _id : user_Id });
+
+  const token = req.headers.authorization.split(' ')[1];
+  const tokenId = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+  const user_Id = req.body.user_Id ? req.body.user_Id : tokenId.user;
+
+  const user = await userModel.findById({ _id: user_Id });
 
   if (user) {
     user.name = req.body.name || user.name;
@@ -167,20 +174,30 @@ const updateUser = asyncHandler(async function (req, res) {
     const updatedUser = await user.save();
 
     res.status(200).json({
-      _id : updatedUser._id,
-      name : updatedUser.name,
-      email : updatedUser.email,
-      status : updatedUser.isBlocked,
-      imageSrc : updatedUser.imageSrc,
-      message : "Updated Succesfully"
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      status: updatedUser.isBlocked,
+      imageSrc: updatedUser.imageSrc,
+      message: "Updated Succesfully"
     })
-    
-  }else{
+
+  } else {
     res.status(404);
     throw new Error('user not fund')
   }
 })
 
+
+const getImage = asyncHandler(async function (req, res) {
+
+  const imageName = req.params.imageName;
+  const imagePath = path.join(__dirname, `../assets/images/${imageName}`);
+
+  // Send the file as a response
+  res.sendFile(imagePath);
+
+})
 
 module.exports = {
   createUser,
@@ -188,5 +205,6 @@ module.exports = {
   home,
   getUser,
   logoutUser,
-  updateUser
+  updateUser,
+  getImage
 }

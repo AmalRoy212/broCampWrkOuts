@@ -15,7 +15,8 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminHome from './pages/admin/AdminHome';
 import AdminIndex from './pages/admin/AdminIndex';
 import CreateUser from './pages/admin/CreateUser';
-import EditUserAdmin from './pages/admin/EditUserAdmin'
+import EditUserAdmin from './pages/admin/EditUserAdmin';
+import AdminPrivateRoutes from './components/adminPriateRoutes/AdminPrivateRoutes';
 
 
 const router = createBrowserRouter(
@@ -33,11 +34,13 @@ const router = createBrowserRouter(
           <Route path='/edit/profile' element={<EditUser />} />
         </Route>
       </Route>
-      <Route path='/admin' element={<AdminIndex />}>
+      <Route path='' element={<AdminIndex />}>
         <Route index={true} path='/admin/login' element={<AdminLogin />} />
-        <Route path='/admin/home' element={<AdminHome />} />
-        <Route path='/admin/create/user' element={<CreateUser />} />
-        <Route path='/admin/update/user' element={<EditUserAdmin />} />
+        <Route path='/admin' element={<AdminPrivateRoutes />} >  
+          <Route path='/admin/home' element={<AdminHome />} />
+          <Route path='/admin/create/user' element={<CreateUser />} />
+          <Route path='/admin/update/user' element={<EditUserAdmin />} />
+        </Route>
       </Route>
     </>
 

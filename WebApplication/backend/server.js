@@ -16,8 +16,15 @@ app.use(cors({origin: true, credentials: true}));
 
 app.use('/api/users',userRoute);
 app.use('/api/admin',adminRoute);
-app.get('/',(req,res) => res.send('yep am readt',port));
 
-
+if(process.env.NODE_ENV == 'production'){
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, 'frontend/build')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  })
+}else{
+  app.get('/',(req,res) => res.send('yep am readt',port));
+}
 
 app.listen(port)

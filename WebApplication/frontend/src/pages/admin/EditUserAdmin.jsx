@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from 'react-bootstrap';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
 import axios from '../../config/axios';
 import AdminHeader from '../../components/adminHeader/AdminHeader';
+import Loading from '../../components/loding/Loding';
 
 
 function EditUserAdmin() {
@@ -11,7 +12,8 @@ function EditUserAdmin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [user, setUser] = useState()
+  const [user, setUser] = useState();
+  const [loading,setLoading] = useState(true);
 
 
 
@@ -29,16 +31,14 @@ function EditUserAdmin() {
     })
       .then((res) => {
         setUser(res.data);
+        setLoading(false)
       })
       .catch((err) => console.log(err.message));
   }, [token, userId]);
 
-
-
-
   const submitHandler = async function (e) {
     e.preventDefault();
-
+    setLoading(true);
     axios.put(`/admin/users/update/`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -53,6 +53,7 @@ function EditUserAdmin() {
       .then((res) => {
         localStorage.removeItem('userId');
         navigate('/admin/home');
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error.message);
@@ -62,6 +63,7 @@ function EditUserAdmin() {
 
   return (
     <>
+      {/* {loading && <Loading />} */}
       <AdminHeader />
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
@@ -69,15 +71,6 @@ function EditUserAdmin() {
             <MDBCard className='p-5' style={{ boxShadow: '0 5px 15px rgba(0, 0, 0, .5)', borderRadius: '10px', background: '#DDDDDE' }}>
               <h4>Update User Profile</h4>
               <Form onSubmit={submitHandler}>
-                {/* <Form.Group className='my-2' controlId='name'>
-                  <br />
-                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    {user && <img style={{ objectFit: 'cover', border: '2px solid black', borderRadius: '50%' }} className='m2' alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>}
-                  </div>
-                  <Form.Label style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='mt-2'>Profile Image </Form.Label>
-                  <br />
-                  <input style={{ width: '99%', border: '1px solid #ced4da', borderRadius: '5px' }} className='m-1 p-1' name='imgSrc' onChange={(e) => setImage(e.target.files[0])} type="file" />
-                </Form.Group> */}
 
                 <Form.Group className='my-2' controlId='name'>
                   <Form.Label style={{ float: 'left' }}>Name </Form.Label>

@@ -8,7 +8,7 @@ router.post('/login',adminController.authAdminLogin);
 router.put('/block/user',protect,adminController.blockUsers);
 router.put('/unblock/user',protect,adminController.unblockUsers);
 router.put('/users/update/',adminController.userEdit);
-router.get('/users',protect,adminController.searchUsers);
+router.get('/users/:searchIpd',protect,adminController.searchUsers);
 router.post('/users/create',protect,adminController.createUser);
 router.delete('/users/delete',protect,adminController.deleteUser);
 router.put('/logout',protect,adminController.logoutAdmin);

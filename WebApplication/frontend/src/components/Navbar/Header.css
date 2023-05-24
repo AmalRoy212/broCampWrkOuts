@@ -8,7 +8,6 @@ body{
   height: 5rem;
   z-index: 3;
   position: fixed;
-  margin-left: -5rem;
 }
 .inner{
   width: 95%;

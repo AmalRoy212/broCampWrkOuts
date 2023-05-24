@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
 import axios from '../config/axios';
 import { useSelector } from 'react-redux';
 import Header from '../components/Navbar/Header';
+import Loading from '../components/loding/Loding';
 
 
 function EditUser() {
@@ -14,9 +15,8 @@ function EditUser() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [image, setImage] = useState('');
-  const [user, setUser] = useState()
-
-
+  const [user, setUser] = useState();
+  const [loading,setLoading] = useState(true)
 
   const navigate = useNavigate();
 
@@ -29,21 +29,22 @@ function EditUser() {
       }
     })
       .then((res) => {
-        setUser(res.data)
+        setUser(res.data);
+        setLoading(false);
       })
         .catch((err) => console.log(err.message));
-  }, [])
+  }, [token])
 
   const submitHandler = async function (e) {
     e.preventDefault();
-
+    setLoading(true);
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
     formData.append('password', password);
     formData.append('imgSrc', image);
 
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       toast.error('Password do not match.!');
     } else {
       try {
@@ -54,6 +55,7 @@ function EditUser() {
           }
         }).then((res) => {
           navigate('/profile');
+          setLoading(false);
         })
       } catch (error) {
         console.log(error.message)
@@ -63,6 +65,7 @@ function EditUser() {
 
   return (
     <>
+      {/* {loading && <Loading />} */}
       <Header className='m-0 p-0' />
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
@@ -73,7 +76,7 @@ function EditUser() {
                 <Form.Group className='my-2' controlId='name'>
                   <br />
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    {user && <img style={{ objectFit: 'cover', border: '2px solid black', borderRadius: '50%' }} className='m2' alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>}
+                    {user && <img style={{ objectFit: 'cover', border: '2px solid black', borderRadius: '50%' }} className='m2' alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) :`/images/${user.imgSrc}`}></img>}
                   </div>
                   <Form.Label style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='mt-2'>Profile Image </Form.Label>
                   <br />

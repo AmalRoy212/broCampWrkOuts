@@ -142,9 +142,9 @@ const unblockUsers = asyncHandler( async function(req,res){
 */
 
 const searchUsers = asyncHandler(async function(req,res){
-  let { searchInp } = req.body;
-  searchInp = searchInp.replace(/\s/g,'');
-  const users = await userModel.find({ name: { $regex: searchInp } });
+  let { searchIpd } = req.params;
+searchIpd = searchIpd.replace(/\s/gi, 'i');
+  const users = await userModel.find({ name: { $regex: searchIpd } });
   if(users){
     res.status(200).json(users);
   }

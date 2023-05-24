@@ -6,7 +6,9 @@ import { Outlet } from 'react-router-dom';
 function App() {
   return (
     <div className="App">
-      <Container className='my-2'>
+      <Container style={{
+      margin:'0',padding:'0',maxWidth:'100%',
+    }}>
         <ToastContainer /> 
         <Outlet />
       </Container>

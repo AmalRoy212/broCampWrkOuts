@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
 import axios from '../../config/axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../redux-toolkit/adminAuthSlice.js'
+import { useDispatch } from 'react-redux';
+import { login } from '../../redux-toolkit/adminAuthSlice.js';
+import Loading from '../../components/loding/Loding';
 
 
 function AdminLogin() {
@@ -13,25 +14,26 @@ function AdminLogin() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const { token } = useSelector((state) => state.admin);
-  // useEffect(() => {
-  //   if(token){
-  //     navigate('/admin');
-  //   }
-  // },[token,navigate])
+  const [loading,setLoading] = useState(false);
+  const token  = localStorage.getItem('admin') ? localStorage.getItem('admin') : null;
+  useEffect(() => {
+    if(token){
+      navigate('/admin/home');
+    }
+  },[token,navigate])
 
   const submitHandler = async function (e) {
     e.preventDefault();
-  
+    setLoading(true);
     try {
       axios.post('/admin/login',{
         email,
         password
       }).then((res)=>{
         dispatch(login(res.data.token));
-        navigate('/admin');
+        navigate('/admin/home');
         localStorage.setItem('admin',res.data.token);
-        console.log(res.data)
+        setLoading(false);
       })
     } catch (error) {
       toast.error(error.message);
@@ -40,6 +42,7 @@ function AdminLogin() {
 
   return (
     <>
+      {/* {loading && <Loading />} */}
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol lg="9" xl="6">

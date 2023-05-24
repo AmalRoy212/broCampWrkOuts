@@ -1,16 +1,17 @@
 import React,{ useEffect, useState} from 'react';
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography } from 'mdb-react-ui-kit';
 import { Button } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import axios from '../config/axios';
 import { useSelector } from 'react-redux';
 import Header from '../components/Navbar/Header';
-
-
+import Loading from '../components/loding/Loding';
+ 
 function Profile() {
 
   const [user,setUser] = useState()
+  const [loading,setLoading] = useState(true)
 
   const { token } = useSelector((state) => state.auth);
 
@@ -21,14 +22,15 @@ function Profile() {
       }
     })
       .then((res) => {
-        console.log(res.data.imgSrc);  
-        setUser(res.data)   
+        setUser(res.data);
+        setLoading(false);   
       })
       .catch((err) => console.log(err.message));
-  },[])
+  })
 
   return (
     <div>
+      {/* {loading && <Loading />} */}
       <Header />
       <div className="gradient-custom-2">
         <MDBContainer className=" h-100">
@@ -38,7 +40,7 @@ function Profile() {
                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
                     <MDBCardImage
-                      alt="Generic placeholder image" className="mt-4 mb-2 img-thumbnail" src={user ? user.imgSrc : null} fluid style={{ width: '150px', zIndex: '1' }} />
+                      alt="Generic placeholder image" className="mt-4 mb-2 img-thumbnail" src={user ? `/images/${user.imgSrc}` :null} fluid style={{ width: '150px', zIndex: '1' ,height:'150px',objectFit:'cover'}} />
                   </div>
                   <div className="ms-3" style={{ marginTop: '130px' }}>
                     <MDBTypography tag="h5">{user ? user.name : null}</MDBTypography>

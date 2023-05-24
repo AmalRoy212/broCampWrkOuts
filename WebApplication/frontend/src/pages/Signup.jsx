@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
 import axios from '../config/axios';
 import Header from '../components/Navbar/Header';
+import Loading from '../components/loding/Loding';
 
 
 function Signup() {
@@ -13,20 +14,21 @@ function Signup() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [image, setImage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const navigae = useNavigate();
 
 
   const submitHandler = async function (e) {
     e.preventDefault();
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('imgSrc', image);
 
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-      formData.append('password', password);
-      formData.append('imgSrc', image);
-
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       toast.error('Password do not match.!');
     } else {
       try {
@@ -37,6 +39,7 @@ function Signup() {
         }).then((res) => {
           console.log(res.data.name);
           navigae('/login');
+          setLoading(false);
         })
       } catch (error) {
         console.log(error.message)
@@ -46,6 +49,7 @@ function Signup() {
 
   return (
     <>
+      {/* {loading && <Loading />} */}
       <Header />
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">

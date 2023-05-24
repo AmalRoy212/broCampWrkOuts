@@ -1,17 +1,15 @@
-import './App.css';
-import { ToastContainer } from 'react-toastify';
+import React from 'react';
 import { Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
 
-function App() {
+function AdminIndex() {
   return (
-    <div className="App">
+    <div>
       <Container className='my-2'>
-        <ToastContainer /> 
         <Outlet />
       </Container>
     </div>
-  );
+  )
 }
 
-export default App;
+export default AdminIndex;

@@ -10,22 +10,37 @@ import UserHome from './pages/UserHome'
 import Login from './pages/Login';
 import PrivateRoute from './components/protectedRoute/PrivateRoutes'
 import Profile from './pages/Profile';
-import EditUser from './pages/EditUser'
+import EditUser from './pages/EditUser';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminHome from './pages/admin/AdminHome';
+import AdminIndex from './pages/admin/AdminIndex';
+import CreateUser from './pages/admin/CreateUser';
+import EditUserAdmin from './pages/admin/EditUserAdmin'
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/' element={<App />}>
-      {/* <Route index={true} path='/' element={<UserHome />} /> */}
-      <Route index={true} path='/signup' element={<Signup />} />
-      <Route path='/login' element={<Login />} />
-      {/* provate routes  */}
-      <Route path='' element={<PrivateRoute />} >
-        <Route path='/home' element={<UserHome />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/edit/profile' element={<EditUser />} />
+    <>
+      <Route path='/' element={<App />}>
+        {/* <Route index={true} path='/' element={<UserHome />} /> */}
+        <Route index={true} path='/signup' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/admin' element={<AdminHome />} />
+        {/* provate routes  */}
+        <Route path='' element={<PrivateRoute />} >
+          <Route path='/home' element={<UserHome />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/edit/profile' element={<EditUser />} />
+        </Route>
       </Route>
+      <Route path='/admin' element={<AdminIndex />}>
+        <Route index={true} path='/admin/login' element={<AdminLogin />} />
+        <Route path='/admin/home' element={<AdminHome />} />
+        <Route path='/admin/create/user' element={<CreateUser />} />
+        <Route path='/admin/update/user' element={<EditUserAdmin />} />
+      </Route>
+    </>
 
-    </Route>
   )
 )
 

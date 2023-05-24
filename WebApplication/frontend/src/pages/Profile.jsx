@@ -5,6 +5,7 @@ import { Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import axios from '../config/axios';
 import { useSelector } from 'react-redux';
+import Header from '../components/Navbar/Header';
 
 
 function Profile() {
@@ -28,6 +29,7 @@ function Profile() {
 
   return (
     <div>
+      <Header />
       <div className="gradient-custom-2">
         <MDBContainer className=" h-100">
           <MDBRow className="justify-content-center align-items-center h-100" style={{ width: '100%' }}>

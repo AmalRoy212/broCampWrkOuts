@@ -3,11 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
-import axios from '../config/axios';
-import Header from '../components/Navbar/Header';
+import axios from '../../config/axios';
+import AdminHeader from '../../components/adminHeader/AdminHeader';
 
 
-function Signup() {
+function CreateUser() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,7 +36,7 @@ function Signup() {
           }
         }).then((res) => {
           console.log(res.data.name);
-          navigae('/login');
+          navigae('/admin/home');
         })
       } catch (error) {
         console.log(error.message)
@@ -46,12 +46,12 @@ function Signup() {
 
   return (
     <>
-      <Header />
+      <AdminHeader />
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol lg="9" xl="6">
-            <MDBCard className='p-5' style={{ boxShadow: '0 5px 15px rgba(0, 0, 0, .5)', marginTop: '5rem', borderRadius: '10px', background: '#DDDDDE' }}>
-              <h1>Sign Up</h1>
+            <MDBCard className='p-5' style={{ boxShadow: '0 5px 15px rgba(0, 0, 0, .5)', borderRadius: '10px', background: '#DDDDDE' }}>
+              <h1>Create User</h1>
               <Form onSubmit={submitHandler}>
                 <Form.Group className='my-2' controlId='name'>
                   <br />
@@ -104,14 +104,8 @@ function Signup() {
                 </Form.Group>
 
                 <Button type='submit' variant='primary' className='mt-3'>
-                  Sign Up
+                  Create
                 </Button>
-
-                <Row className='py-3'>
-                  <Col>
-                    Already have an account? <Link to={'/login'}>Register</Link>
-                  </Col>
-                </Row>
               </Form>
             </MDBCard>
           </MDBCol>
@@ -121,4 +115,4 @@ function Signup() {
   )
 }
 
-export default Signup;
+export default CreateUser;

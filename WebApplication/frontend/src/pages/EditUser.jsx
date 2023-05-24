@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
 import axios from '../config/axios';
 import { useSelector } from 'react-redux';
+import Header from '../components/Navbar/Header';
 
 
 function EditUser() {
@@ -62,6 +63,7 @@ function EditUser() {
 
   return (
     <>
+      <Header className='m-0 p-0' />
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol lg="9" xl="6">

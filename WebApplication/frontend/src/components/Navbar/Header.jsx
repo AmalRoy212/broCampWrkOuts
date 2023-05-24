@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './Header.css';
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import {  Nav } from 'react-bootstrap';
@@ -10,7 +10,7 @@ import { logout } from '../../redux-toolkit/authSlice';
 function Header() {
   const dispatch = useDispatch();
   let { token } = useSelector((state) => state.auth);
-  console.log(token);
+
   const logOutHandler = () => {
     axios.put('/users/logout',null,{
       headers: {
@@ -21,7 +21,7 @@ function Header() {
       dispatch(logout());
     }).catch((error) => console.log(error.message));
   }
-
+  
   return (
     <div>
       <div className='holder'>

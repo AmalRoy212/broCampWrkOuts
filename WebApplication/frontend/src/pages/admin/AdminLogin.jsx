@@ -3,38 +3,35 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
-import axios from '../config/axios';
+import axios from '../../config/axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux-toolkit/authSlice'
-import Header from '../components/Navbar/Header';
+import { login } from '../../redux-toolkit/adminAuthSlice.js'
 
 
-function Login() {
+function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const { token } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    if(token){
-      navigate('/home');
-    }
-  },[token,navigate])
+  // const { token } = useSelector((state) => state.admin);
+  // useEffect(() => {
+  //   if(token){
+  //     navigate('/admin');
+  //   }
+  // },[token,navigate])
 
   const submitHandler = async function (e) {
     e.preventDefault();
   
     try {
-      axios.post('/users/login',{
+      axios.post('/admin/login',{
         email,
         password
       }).then((res)=>{
-        localStorage.setItem('token',res.data.token);
         dispatch(login(res.data.token));
-        navigate('/home');
+        navigate('/admin');
+        localStorage.setItem('admin',res.data.token);
+        console.log(res.data)
       })
     } catch (error) {
       toast.error(error.message);
@@ -43,12 +40,11 @@ function Login() {
 
   return (
     <>
-      <Header className='p-0' />
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol lg="9" xl="6">
             <MDBCard className='p-5' style={{ boxShadow: '0 5px 15px rgba(0, 0, 0, .5)',marginTop:'5rem',borderRadius:'10px',background:'#DDDDDE'}}>
-              <h1>Log In</h1>
+              <h1>Admin Log In</h1>
               <Form onSubmit={submitHandler}>
 
                 <Form.Group className='my-2' controlId='email'>
@@ -89,4 +85,4 @@ function Login() {
   )
 }
 
-export default Login;
+export default AdminLogin;

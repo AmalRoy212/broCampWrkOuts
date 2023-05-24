@@ -70,7 +70,8 @@ async function adminLoginHandler(_id, res) {
   const admin = await adminModel.findById(_id);
   res.status(200).json({
     user: admin.email,
-    token: admin.accessToken
+    token: admin.accessToken,
+    isAdmin : admin.isAdmin
   })
 }
 
@@ -83,8 +84,8 @@ async function adminLoginHandler(_id, res) {
 
 const blockUsers = asyncHandler( async function(req,res){
   const { userId } = req.body;
-  if(theUser){
-    const user = await userModel.findByIdAndUpdate({ _id : theUser },{$set : {isBlocked:true}});
+  if(userId){
+    const user = await userModel.findByIdAndUpdate({ _id : userId },{$set : {isBlocked:true}});
     if(user){
       res.status(200).json({
         _id : user._id,
@@ -92,6 +93,36 @@ const blockUsers = asyncHandler( async function(req,res){
         email : user.email,
         completed : true,
         message : 'User blocked'
+      })
+    }else{
+      res.status(404);
+      throw new Error('Couldnt find the user');
+    }
+  }else{
+    res.status(404);
+    throw new Error('Id Couldnt find');
+  }
+})
+
+/*
+  * Blocking the User : Blocking the user with valid id and return the user details
+  * Method : Put
+  * Route : /api/admin/
+  * Access : Private
+*/
+
+const unblockUsers = asyncHandler( async function(req,res){
+  const { userId } = req.body;
+
+  if(userId){
+    const user = await userModel.findByIdAndUpdate({ _id : userId },{$set : {isBlocked:false}});
+    if(user){
+      res.status(200).json({
+        _id : user._id,
+        name : user.name,
+        email : user.email,
+        completed : true,
+        message : 'User unblocked'
       })
     }else{
       res.status(404);
@@ -183,8 +214,8 @@ const deleteUser = asyncHandler( async function(req,res){
 */
 
 const updateUser = asyncHandler(async function (req, res) {
-  const { userId } = req.body;
-  const user = await userModel.findById({ _id : userId });
+  const { id } = req.params;
+  const user = await userModel.findById(id);
 
   if (user) {
     user.name = req.body.name || user.name;
@@ -227,6 +258,51 @@ const logoutAdmin = asyncHandler(async function (req, res) {
   if (admin) {
     res.status(200).json({ completed: true, message: 'loged out succesfully' });
   }
+});
+
+const getUsers = asyncHandler(async function(req,res){
+  const users = await userModel.find();
+  res.status(200).json(users);
+})
+
+const getSingleUser = asyncHandler(async function(req, res) {
+  const { id } = req.params;
+  const user = await userModel.findById(id);
+  res.status(200).json(user);
+});
+
+const userEdit = asyncHandler( async function (req,res){
+  const { id } = req.body.data;
+  const user = await userModel.findById(id);
+
+  console.log(user);
+
+  if (user) {
+    user.name = req.body.data.name || user.name;
+    user.email = req.body.data.email || user.email;
+    user.isBlocked = user.isBlocked;
+    user.imageSrc = user.imageSrc;
+    user.accessToken = user.accessToken;
+
+    if (req.body.password) {
+      user.password = req.body.data.password || user.password;
+    }
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      _id : updatedUser._id,
+      name : updatedUser.name,
+      email : updatedUser.email,
+      status : updatedUser.isBlocked,
+      imageSrc : updatedUser.imageSrc,
+      message : "Updated Succesfully"
+    })
+    
+  }else{
+    res.status(404);
+    throw new Error('user not fund')
+  }
 })
 
 module.exports = {
@@ -237,5 +313,9 @@ module.exports = {
   createUser,
   deleteUser,
   updateUser,
-  logoutAdmin
+  logoutAdmin,
+  getUsers,
+  unblockUsers,
+  getSingleUser,
+  userEdit
 }

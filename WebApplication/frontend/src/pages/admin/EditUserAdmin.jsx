@@ -1,75 +1,92 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from 'react-bootstrap';
-import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import { Form, Button } from 'react-bootstrap';
 import { MDBCol, MDBContainer, MDBRow, MDBCard } from 'mdb-react-ui-kit';
-import axios from '../config/axios';
-import Header from '../components/Navbar/Header';
+import axios from '../../config/axios';
+import AdminHeader from '../../components/adminHeader/AdminHeader';
 
 
-function Signup() {
+function EditUserAdmin() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [image, setImage] = useState('');
+  const [user, setUser] = useState()
 
-  const navigae = useNavigate();
+
+
+  const navigate = useNavigate();
+
+  // let { token } = useSelector((state) => state.admin);
+  const token = localStorage.getItem('admin') ? localStorage.getItem('admin') : null;
+  const userId = localStorage.getItem('userId') ? localStorage.getItem('userId') : null;
+
+  useEffect(() => {
+    axios.get(`/admin/get/single/user/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => console.log(err.message));
+  }, [token, userId]);
+
+
 
 
   const submitHandler = async function (e) {
     e.preventDefault();
 
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-      formData.append('password', password);
-      formData.append('imgSrc', image);
-
-    if (password != confirmPassword) {
-      toast.error('Password do not match.!');
-    } else {
-      try {
-        axios.post('/users/signup', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then((res) => {
-          console.log(res.data.name);
-          navigae('/login');
-        })
-      } catch (error) {
-        console.log(error.message)
+    axios.put(`/admin/users/update/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      data :{
+        name,
+        email,
+        password,
+        id : userId
       }
-    }
+    })
+      .then((res) => {
+        localStorage.removeItem('userId');
+        navigate('/admin/home');
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
+  
 
   return (
     <>
-      <Header />
+      <AdminHeader />
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol lg="9" xl="6">
-            <MDBCard className='p-5' style={{ boxShadow: '0 5px 15px rgba(0, 0, 0, .5)', marginTop: '5rem', borderRadius: '10px', background: '#DDDDDE' }}>
-              <h1>Sign Up</h1>
+            <MDBCard className='p-5' style={{ boxShadow: '0 5px 15px rgba(0, 0, 0, .5)', borderRadius: '10px', background: '#DDDDDE' }}>
+              <h4>Update User Profile</h4>
               <Form onSubmit={submitHandler}>
-                <Form.Group className='my-2' controlId='name'>
+                {/* <Form.Group className='my-2' controlId='name'>
                   <br />
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    {image && <img style={{ objectFit: 'cover', border: '2px solid black', borderRadius: '50%' }} className='m2' alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>}
+                    {user && <img style={{ objectFit: 'cover', border: '2px solid black', borderRadius: '50%' }} className='m2' alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>}
                   </div>
                   <Form.Label style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='mt-2'>Profile Image </Form.Label>
                   <br />
                   <input style={{ width: '99%', border: '1px solid #ced4da', borderRadius: '5px' }} className='m-1 p-1' name='imgSrc' onChange={(e) => setImage(e.target.files[0])} type="file" />
-                </Form.Group>
+                </Form.Group> */}
 
                 <Form.Group className='my-2' controlId='name'>
                   <Form.Label style={{ float: 'left' }}>Name </Form.Label>
                   <Form.Control
                     type='text'
-                    placeholder='Please enter your name'
+                    placeholder={user && user.name}
                     value={name}
-                    onChange={(e) => setName(e.target.value)}>
+                    onChange={(e) => setName(e.target.value)}
+                    >
                   </Form.Control>
                 </Form.Group>
 
@@ -77,7 +94,7 @@ function Signup() {
                   <Form.Label style={{ float: 'left' }}>Email Address</Form.Label>
                   <Form.Control
                     type='email'
-                    placeholder='Please enter email'
+                    placeholder={user && user.email}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}>
                   </Form.Control>
@@ -103,15 +120,7 @@ function Signup() {
                   </Form.Control>
                 </Form.Group>
 
-                <Button type='submit' variant='primary' className='mt-3'>
-                  Sign Up
-                </Button>
-
-                <Row className='py-3'>
-                  <Col>
-                    Already have an account? <Link to={'/login'}>Register</Link>
-                  </Col>
-                </Row>
+                <Button type='submit' variant='primary' className='mt-3'>Update</Button>
               </Form>
             </MDBCard>
           </MDBCol>
@@ -121,4 +130,4 @@ function Signup() {
   )
 }
 
-export default Signup;
+export default EditUserAdmin;

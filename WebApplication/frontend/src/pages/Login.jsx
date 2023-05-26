@@ -76,7 +76,7 @@ function Login() {
                 </Form.Group>
 
                 <Button type='submit' variant='primary' className='mt-3'>
-                  Sign Up
+                  Log In
                 </Button>
 
                 <Row className='py-3'>

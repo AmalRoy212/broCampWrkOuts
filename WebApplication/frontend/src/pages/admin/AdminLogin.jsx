@@ -71,14 +71,8 @@ function AdminLogin() {
                 </Form.Group>
 
                 <Button type='submit' variant='primary' className='mt-3'>
-                  Sign Up
+                  Log In
                 </Button>
-
-                <Row className='py-3'>
-                  <Col>
-                    New to me? <Link to={'/signup'}>Register</Link>
-                  </Col>
-                </Row>
               </Form>
             </MDBCard>
           </MDBCol>

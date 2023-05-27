@@ -1,13 +1,15 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
-const userModel = require('../models/userModel');
+const middleService = require('../services/middlewareService');
 
 const protecter = asyncHandler(async function (req, res, next) {
   const token = req.headers.authorization.split(' ')[1];
   if (token) {
     try {
       const decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-      const user = await userModel.findById({ _id: decode.user });
+      const userId = decode.user
+      const user = await middleService.findUser(userId)
+      console.log(user);
       if (token === user.accessToken) {
         if (user) {
           req.body.user_Id = user._id;

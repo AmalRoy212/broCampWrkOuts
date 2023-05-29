@@ -8,7 +8,7 @@ for(let i=0;i<ar.length-1;i++){
       let temp1 = ar[j];
       ar[j] = temp;
       temp = temp1;
-    }
+    } 
     i=i+2;
   }
 }

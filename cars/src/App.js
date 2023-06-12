@@ -1,9 +1,14 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import './style.css';
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { CubeCamera, Environment, OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Ground from "./Ground";
 import Car from "./Car";
+import Rings from "./Rings";
+import Boxes from "./Boxes";
+import { Bloom, ChromaticAberration, EffectComposer, DepthOfField } from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
+import FlotingGrid from "./FlotingGrid";
 
 function CarShow() {
   return <>
@@ -16,7 +21,19 @@ function CarShow() {
     </mesh> */}
     {/* {let color = new Color(0,0,0);} */}
     <color args={[0, 0, 0]} attach={"background"} />
-    <Car/>
+
+    <CubeCamera resolution={256} frames={Infinity}>
+      {
+        (texture) => (
+          <>
+            <Environment map={texture} />
+            <Car/>
+          </>
+        )
+      }
+    </CubeCamera>
+    <Rings/>
+    <Boxes/>
     {
       // let spotLight = new SpotLight();
       // spotLight.intencity = 1.5;
@@ -42,6 +59,23 @@ function CarShow() {
       shadowBias={0.0001}
     />
     <Ground />
+    {/* <FlotingGrid/> */}
+
+    <EffectComposer>
+    {/* <DepthOfField focusDistance={0.0035} focalLength={0.01} bokehScale={3} height={window.innerHeight} /> */}
+      <Bloom blendFunction={BlendFunction.ADD}
+      intensity={1.3}
+      width={300}
+      height={300}
+      kernelSize={5}
+      luminanceThreshold={0.15}
+      luminanceSmoothing={0.025}
+      />
+      <ChromaticAberration
+       blendFunction={BlendFunction.NORMAL}
+       offset={[0.0005,0.0012]}
+      />
+    </EffectComposer>
   </>
 }
 

@@ -11,7 +11,7 @@ function Car() {
 
   useEffect(() => {
     gltf.scene.scale.set(0.005, 0.005, 0.005);
-    gltf.scene.rotation.y = -Math.PI / 2;
+    gltf.scene.rotation.y = -Math.PI ;
     gltf.scene.traverse((object) => {
       if (object instanceof Mesh) {
         object.castShadow = true;

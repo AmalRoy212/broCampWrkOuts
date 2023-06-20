@@ -8,7 +8,7 @@ import Rings from "./Rings";
 import Boxes from "./Boxes";
 import { Bloom, ChromaticAberration, EffectComposer, DepthOfField } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
-import FlotingGrid from "./FlotingGrid";
+// import FlotingGrid from "./FlotingGrid";
 
 function CarShow() {
   return <>
